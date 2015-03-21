@@ -30,7 +30,22 @@ describe('The Circuit Breaker Module', () => {
 			});
 		});
 		it('should allow the times to execute to be configured', (done) => {
-
+			var CircuitBreaker = require('./cb');
+			var cb = new CircuitBreaker({times:6});
+			var executeCount = 0;
+			cb.execute((finalError) => {
+				executeCount++;
+				if (executeCount === 6) {
+					assert.ok(finalError !== null, 'this got executed');
+					done();	
+				} else if (executeCount > 6) {
+					assert.fail(executeCount, 6);
+				} 
+				else {
+					throw new Error("swallow this please");
+				}
+				
+			});
 			
 		});
 	});
