@@ -68,6 +68,27 @@ describe('The Circuit Breaker Module', () => {
 				
 			});
 		});
+		it('should have the delay between execution double when passed a backoff property', (done) => {
+			let cb = new CircuitBreaker({ delay: 100, backoff:true, times: 4});
+			let executeCount = 0;
+			let start = Date.now();
+			cb.execute((finalError) => {
+				executeCount++;
+				if (executeCount === 4) {
+					let end = Date.now();
+					assert.ok(finalError !== null, 'this got executed');
+					console.log(end - start);
+					assert.ok(start < end && (start + 320 > end && start + 250 < end ) , 'Should be long enough, but not to long');
+					done();	
+				} else if (executeCount > 4) {
+					assert.fail(executeCount,finalError, "executed too many times");
+				} 
+				else {
+					throw new Error("This is an error");
+				}
+				
+			});
+		});
 	});
 
 });
