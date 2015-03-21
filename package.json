@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Kevnz/circuit-breaker.git"
+    "url": "https://github.com/Kevnz/back-off.git"
   },
   "author": "Kevin Isom <kevin.isom@gmail.com>",
   "license": "The Unlicense",
   "bugs": {
-    "url": "https://github.com/Kevnz/circuit-breaker/issues"
+    "url": "https://github.com/Kevnz/back-off/issues"
   },
-  "homepage": "https://github.com/Kevnz/circuit-breaker",
+  "homepage": "https://github.com/Kevnz/back-off",
   "devDependencies": {
     "babel": "^4.7.16",
     "mocha": "^2.2.1"
