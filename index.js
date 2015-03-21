@@ -13,6 +13,7 @@ var CircuitBreaker = (function () {
         props = props || {};
         this.timesToTry = props.times || 3;
         this.delay = props.delay || 0;
+        this.backoff = props.backoff || false;
         _get(Object.getPrototypeOf(CircuitBreaker.prototype), "constructor", this).call(this, props);
     }
 
@@ -21,7 +22,7 @@ var CircuitBreaker = (function () {
             value: function tryCall(callback, timesRemaining) {
                 var _this = this;
 
-                console.log(this);
+                timesRemaining--;
                 if (timesRemaining === 0) {
                     callback({ status: "Failed" });
                     return;
@@ -30,10 +31,11 @@ var CircuitBreaker = (function () {
                 try {
                     callback();
                 } catch (e) {
-                    timesRemaining--;
                     if (this.delay > 0) {
+                        console.log(this.timesToTry - timesRemaining);
+                        var delay = this.backoff ? this.delay * (this.timesToTry - timesRemaining) : this.delay;
+                        console.log("the delay " + delay);
                         setTimeout(function () {
-                            console.log("timeout thing");
                             _this.tryCall(callback, timesRemaining);
                         }, this.delay);
                     } else {
