@@ -1,6 +1,8 @@
 
 export default class CircuitBreaker {
 	constructor(props) {
+        props = props || {};
+        this.timesToTry = props.times || 3;
         super(props);
     }
     tryCall(callback, timesRemaining) {
@@ -17,6 +19,7 @@ export default class CircuitBreaker {
     	}
     }
     execute(callback) {
-		this.tryCall(callback, 2)
+        console.log(this);
+		this.tryCall(callback, this.timesToTry)
     }
 }
