@@ -10,12 +10,18 @@ var CircuitBreaker = (function () {
     function CircuitBreaker(props) {
         _classCallCheck(this, CircuitBreaker);
 
+        props = props || {};
+        this.timesToTry = props.times || 3;
+        this.delay = props.delay || 0;
         _get(Object.getPrototypeOf(CircuitBreaker.prototype), "constructor", this).call(this, props);
     }
 
     _createClass(CircuitBreaker, {
         tryCall: {
             value: function tryCall(callback, timesRemaining) {
+                var _this = this;
+
+                console.log(this);
                 if (timesRemaining === 0) {
                     callback({ status: "Failed" });
                     return;
@@ -25,13 +31,20 @@ var CircuitBreaker = (function () {
                     callback();
                 } catch (e) {
                     timesRemaining--;
-                    this.tryCall(callback, timesRemaining);
+                    if (this.delay > 0) {
+                        setTimeout(function () {
+                            console.log("timeout thing");
+                            _this.tryCall(callback, timesRemaining);
+                        }, this.delay);
+                    } else {
+                        this.tryCall(callback, timesRemaining);
+                    }
                 }
             }
         },
         execute: {
             value: function execute(callback) {
-                this.tryCall(callback, 2);
+                this.tryCall(callback, this.timesToTry);
             }
         }
     });
