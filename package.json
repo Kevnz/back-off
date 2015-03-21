@@ -1,6 +1,6 @@
 {
   "name": "back-off",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "Circuit Breaker pattern in js",
   "main": "index.js",
   "scripts": {
