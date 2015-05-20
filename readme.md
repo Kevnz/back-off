@@ -5,7 +5,11 @@ This module let's you use the circuit breaker patter and call a function multipl
 
 ```
 import BackOff from 'back-off';
-let backoff = new BackOff({ times: 5, delay: 50, backoff: true})
+let backoff = new BackOff({ 
+    times: 5, //number of times method should be called
+    delay: 50, //delay in milliseconds between calls
+    backoff: true // if the delay should be doubled between execution attempts
+});
 
 backoff.execute((finalFail) => {
    //do something here
