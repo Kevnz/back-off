@@ -1,57 +1,82 @@
-"use strict";
+'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var CircuitBreaker = (function () {
-    function CircuitBreaker(props) {
-        _classCallCheck(this, CircuitBreaker);
+var CircuitBreaker = function () {
+  function CircuitBreaker(props) {
+    _classCallCheck(this, CircuitBreaker);
 
-        props = props || {};
-        this.timesToTry = props.times || 3;
-        this.delay = props.delay || 0;
-        this.backoff = props.backoff || false;
-        _get(Object.getPrototypeOf(CircuitBreaker.prototype), "constructor", this).call(this, props);
-    }
+    Object.assign(this, {
+      times: 3,
+      delay: 0,
+      backoff: false,
+      promised: false,
+      callback: null
+    }, props);
+    this.timesToTry = this.times;
+    this.timesRemaining = this.times;
+  }
 
-    _createClass(CircuitBreaker, {
-        tryCall: {
-            value: function tryCall(callback, timesRemaining) {
-                var _this = this;
+  _createClass(CircuitBreaker, [{
+    key: 'tryCall',
+    value: function tryCall(methodToTry, resolve, reject) {
+      var _this = this;
 
-                timesRemaining--;
-                if (timesRemaining === 0) {
-                    callback({ status: "Failed" });
-                    return;
-                }
+      this.timesRemaining--;
 
-                try {
-                    callback();
-                } catch (e) {
-                    if (this.delay > 0) {
-                        console.log(this.timesToTry - timesRemaining);
-                        var delay = this.backoff ? this.delay * (this.timesToTry - timesRemaining) : this.delay;
-                        console.log("the delay " + delay);
-                        setTimeout(function () {
-                            _this.tryCall(callback, timesRemaining);
-                        }, this.delay);
-                    } else {
-                        this.tryCall(callback, timesRemaining);
-                    }
-                }
-            }
-        },
-        execute: {
-            value: function execute(callback) {
-                this.tryCall(callback, this.timesToTry);
-            }
+      if (this.timesRemaining < 0) {
+        if (reject) {
+          reject();
+        } else if (this.callback) {
+          this.callback(new Error('All Attempts Failed'));
         }
-    });
+      }
+      if (this.timesRemaining < -1) {
+        throw new Error('Negative ' + this.timesRemaining + ' Times Remaining');
+      }
+      try {
+        methodToTry();
+        if (resolve) {
+          resolve();
+        } else if (this.callback) {
+          this.callback();
+        }
+      } catch (e) {
+        if (this.delay > 0) {
+          var delay = this.backoff ? this.delay * (this.timesToTry - this.timesRemaining) : this.delay;
+          return setTimeout(function () {
+            return _this.tryCall(methodToTry, resolve, reject);
+          }, this.delay);
+        } else {
+          return this.tryCall(methodToTry, resolve, reject);
+        }
+      }
+    }
+  }, {
+    key: 'execute',
+    value: function execute(attempt, callback) {
+      this.callback = callback;
+      this.tryCall(attempt);
+    }
+  }, {
+    key: 'executeAsPromise',
+    value: function executeAsPromise(attempt) {
+      var _this2 = this;
 
-    return CircuitBreaker;
-})();
+      this.promised = true;
+      return new Promise(function (resolve, reject) {
+        _this2.tryCall(attempt, resolve, reject);
+      });
+    }
+  }]);
 
-module.exports = CircuitBreaker;
+  return CircuitBreaker;
+}();
+
+exports.default = CircuitBreaker;
