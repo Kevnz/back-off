@@ -1,36 +1,56 @@
 
 export default class CircuitBreaker {
   constructor (props) {
-    props = props || {};
-    this.timesToTry = props.times || 3;
-    this.delay = props.delay || 0;
-    this.backoff = props.backoff || false;
-    super(props);
+    Object.assign(this, {
+      times: 3,
+      delay: 0,
+      backoff: false,
+      promised:false,
+      callback: null
+    }, props);
+    this.timesToTry = this.times;
+    this.timesRemaining = this.times;
   }
-  tryCall (callback, timesRemaining) {
-    timesRemaining--;
-    if(timesRemaining === 0) {
-      callback({status:'Failed'});
-      return;
-    }
+  tryCall (methodToTry, resolve, reject) {
+    this.timesRemaining--;
 
+    if (this.timesRemaining < 0 ) {
+      if (reject) {
+        reject();
+      } else if (this.callback) {
+        this.callback(new Error('All Attempts Failed'));
+      }
+    }
+    if (this.timesRemaining < -1 ) {
+      throw new Error(`Negative ${this.timesRemaining} Times Remaining`);
+    }
     try {
-      callback();
+      methodToTry();
+      if (resolve) {
+        resolve();
+      } else if (this.callback) {
+        this.callback();
+      }
     } catch (e) {
       if (this.delay > 0) {
-        console.log((this.timesToTry - timesRemaining));
-        let delay = this.backoff ? this.delay * (this.timesToTry - timesRemaining) : this.delay;
-        console.log('the delay ' + delay);
-        setTimeout(() => {
-          this.tryCall(callback,timesRemaining);
+        let delay = this.backoff ? this.delay * (this.timesToTry - this.timesRemaining) : this.delay;
+        return setTimeout(() => {
+          return this.tryCall(methodToTry, resolve, reject);
         }, this.delay);
       } else {
-        this.tryCall(callback,timesRemaining);
+        return this.tryCall(methodToTry, resolve, reject);
       }
-
     }
   }
-  execute (callback) {
-    this.tryCall(callback, this.timesToTry);
+  execute (attempt, callback) {
+    this.callback = callback;
+    this.tryCall(attempt);
+  }
+  executeAsPromise(attempt) {
+    this.promised = true;
+    return new Promise((resolve, reject) => {
+      this.tryCall(attempt, resolve, reject);
+    })
+
   }
 }

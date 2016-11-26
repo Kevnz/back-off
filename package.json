@@ -1,11 +1,11 @@
 {
   "name": "back-off",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Circuit Breaker pattern in js",
   "main": "index.js",
   "scripts": {
     "build": "babel cb.js --out-file index.js",
-    "test": "mocha --compilers js:babel/register",
+    "test": "mocha --compilers js:babel-register",
     "watch": "mocha -w --compilers js:babel/register"
   },
   "repository": {
@@ -13,13 +13,15 @@
     "url": "https://github.com/Kevnz/back-off.git"
   },
   "author": "Kevin Isom <kevin.isom@gmail.com>",
-  "license": "The Unlicense",
+  "license": "Unlicense",
   "bugs": {
     "url": "https://github.com/Kevnz/back-off/issues"
   },
   "homepage": "https://github.com/Kevnz/back-off",
   "devDependencies": {
-    "babel": "^4.7.16",
-    "mocha": "^2.2.1"
+    "babel-cli": "^6.18.0",
+    "babel-preset-latest": "^6.16.0",
+    "babel-register": "^6.18.0",
+    "mocha": "^3.2.0"
   }
 }
