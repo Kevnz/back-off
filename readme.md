@@ -13,8 +13,8 @@ const backoff = new BackOff({
     backoff: true // if the delay should be doubled between execution attempts
 });
 
-backoff.executeAsPromise((finalFail) => {
-  //do something here
+backoff.executeAsPromise(() => {
+  //do something here that may fail
 })
 .then(()=> {
   // do something else
