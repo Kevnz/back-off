@@ -5,7 +5,7 @@
 This module let's you use the circuit breaker pattern and call a function multiple times. In addition you can specify a delay to be applied between attempts as well as extending the delay as attempts are made.
 
 ### Promise
-```
+```js
 import BackOff from 'back-off';
 const backoff = new BackOff({ 
     times: 5, //number of times method should be called
@@ -26,7 +26,7 @@ backoff.executeAsPromise(() => {
 ```
 
 ### Callback
-```
+```js
 import BackOff from 'back-off';
 const backoff = new BackOff({ 
     times: 5, //number of times method should be called
