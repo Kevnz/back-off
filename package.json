@@ -23,5 +23,8 @@
     "babel-preset-latest": "^6.16.0",
     "babel-register": "^6.18.0",
     "mocha": "^3.2.0"
+    "mocha": "^5.2.0",
+    "nvm-test": "^2.0.3",
+    "nvm-test-plugin-travis": "^2.0.1"
   }
 }
