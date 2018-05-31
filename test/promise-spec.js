@@ -155,7 +155,7 @@ describe('The Circuit Breaker Module As Promised', () => {
       });
     });
     it('should have the delay between execution double when passed a backoff property', (done) => {
-      const cb = new CircuitBreaker({ delay: 100, backoff:true, times: 4});
+      const cb = new CircuitBreaker({ delay: 105, backoff: true, times: 4});
       let executeCount = 0;
       const start = Date.now();
       cb.executeAsPromise((finalError) => {
