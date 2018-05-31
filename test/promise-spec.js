@@ -1,5 +1,5 @@
-import assert from 'assert';
 import CircuitBreaker from '../cb';
+import assert from 'assert';
 
 describe('The Circuit Breaker Module As Promised', () => {
   describe('the api', () => {
@@ -14,8 +14,73 @@ describe('The Circuit Breaker Module As Promised', () => {
         done();
       });
     });
-    it('should execute a function a default of 3 times', (done) => {
+    it('should accept a function and return a promise on completion when `executeAsync` is called', (done) => {
+      const promisedFunc = () => {
+        return new Promise((resolve, reject) => {
+          assert.ok(true, 'promise got executed');
+          setTimeout(resolve, 20);
+        })
+      }
+      const cb = new CircuitBreaker();
+      cb.executeAsync(promisedFunc)
+      .then(()=> {
+        assert.ok(true, 'then got executed');
+        done();
+      });
+    });
 
+    it('should accept a function and return a promise on completion when `executeAsync` is called with a promise', (done) => {
+      const promisedFunc = () => {
+        return new Promise((resolve, reject) => {
+          assert.ok(true, 'promise got executed');
+          setTimeout(resolve, 20);
+        })
+      }
+      const cb = new CircuitBreaker();
+      cb.executeAsync(promisedFunc)
+      .then((result)=> {
+        assert.ok(true, 'final then got executed');
+        done();
+      });
+    });
+
+    it('should accept a function and return a result from the promise on completion when `executeAsync` is called with a promise', (done) => {
+      const promisedFunc = () => {
+        return new Promise((resolve, reject) => {
+          assert.ok(true, 'promise got executed');
+          setTimeout(()=> {
+            return resolve(42);
+          }, 20);
+        })
+      }
+      const cb = new CircuitBreaker();
+      cb.executeAsync(promisedFunc)
+      .then((result)=> {
+        assert.ok(result === 42, 'final then got executed');
+        done();
+      });
+    });
+    it('should execute promise again when first result fails', (done) => {
+      let count = 0;
+      const promisedFunc = () => {
+        return new Promise((resolve, reject) => {
+          assert.ok(true, 'promise got executed');
+          if (count === 0) {
+            count++;
+            return reject();
+          }
+          assert.ok(count > 0, 'promise got executed again');
+          return setTimeout(resolve, 20);
+        })
+      }
+      const cb = new CircuitBreaker();
+      cb.executeAsync(promisedFunc)
+      .then((result)=> {
+        assert.ok(true, 'final then got executed');
+        done();
+      });
+    });
+    it('should execute a function a default of 3 times', (done) => {
       const cb = new CircuitBreaker();
       let executeCount = 0;
       cb.executeAsPromise((finalError) => {
@@ -28,10 +93,19 @@ describe('The Circuit Breaker Module As Promised', () => {
         else {
           throw new Error("This is an error");
         }
-
       })
       .then(()=> {
         assert.ok(true, 'then got executed');
+        done();
+      });
+    });
+    it('should when all attemps fail enter the catch block', (done) => {
+      const cb = new CircuitBreaker();
+      cb.executeAsync((finalError) => {
+        throw new Error("This is an error");
+      })
+      .catch(()=> {
+        assert.ok(true, 'catch got executed');
         done();
       });
     });
