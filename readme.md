@@ -4,10 +4,28 @@
 
 This module let's you use the circuit breaker pattern and call a function multiple times. In addition you can specify a delay to be applied between attempts as well as extending the delay as attempts are made.
 
-### Promise
+### Async/Await
+
 ```js
 import BackOff from 'back-off';
-const backoff = new BackOff({ 
+const backoff = new BackOff({
+    times: 5, //number of times method should be called
+    delay: 50, //delay in milliseconds between calls
+    backoff: true // if the delay should be doubled between execution attempts
+});
+try {
+  const result = await backoff.executeAsync(asyncTask);
+} catch (error) {
+  //do something with the final error
+}
+
+```
+
+### Promise
+
+```js
+import BackOff from 'back-off';
+const backoff = new BackOff({
     times: 5, //number of times method should be called
     delay: 50, //delay in milliseconds between calls
     backoff: true // if the delay should be doubled between execution attempts
@@ -26,9 +44,10 @@ backoff.executeAsPromise(() => {
 ```
 
 ### Callback
+
 ```js
-import BackOff from 'back-off';
-const backoff = new BackOff({ 
+const BackOff = require('back-off').default;
+const backoff = new BackOff({
     times: 5, //number of times method should be called
     delay: 50, //delay in milliseconds between calls
     backoff: true // if the delay should be doubled between execution attempts

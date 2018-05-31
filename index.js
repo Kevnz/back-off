@@ -59,6 +59,40 @@ var CircuitBreaker = function () {
       }
     }
   }, {
+    key: 'tryPromise',
+    value: function tryPromise(methodToTry, resolve, reject) {
+      var _this2 = this;
+
+      this.timesRemaining--;
+
+      if (this.timesRemaining < 0) {
+        if (reject) {
+          reject();
+        } else if (this.callback) {
+          this.callback(new Error('All Attempts Failed'));
+        }
+      }
+      if (this.timesRemaining < -1) {
+        throw new Error('Negative ' + this.timesRemaining + ' Times Remaining');
+      }
+      methodToTry().then(function (result) {
+        if (resolve) {
+          resolve(result);
+        } else if (_this2.callback) {
+          _this2.callback(null, result);
+        }
+      }).catch(function (e) {
+        if (_this2.delay > 0) {
+          var delay = _this2.backoff ? _this2.delay * (_this2.timesToTry - _this2.timesRemaining) : _this2.delay;
+          return setTimeout(function () {
+            return _this2.tryCall(methodToTry, resolve, reject);
+          }, _this2.delay);
+        } else {
+          return _this2.tryCall(methodToTry, resolve, reject);
+        }
+      });
+    }
+  }, {
     key: 'execute',
     value: function execute(attempt, callback) {
       this.callback = callback;
@@ -67,11 +101,21 @@ var CircuitBreaker = function () {
   }, {
     key: 'executeAsPromise',
     value: function executeAsPromise(attempt) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.promised = true;
       return new Promise(function (resolve, reject) {
-        _this2.tryCall(attempt, resolve, reject);
+        _this3.tryCall(attempt, resolve, reject);
+      });
+    }
+  }, {
+    key: 'executeAsync',
+    value: function executeAsync(attempt) {
+      var _this4 = this;
+
+      this.promised = true;
+      return new Promise(function (resolve, reject) {
+        _this4.tryPromise(attempt, resolve, reject);
       });
     }
   }]);
