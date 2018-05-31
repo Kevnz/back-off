@@ -42,6 +42,41 @@ export default class CircuitBreaker {
       }
     }
   }
+  tryPromise (methodToTry, resolve, reject) {
+    this.timesRemaining--;
+
+    if (this.timesRemaining < 0 ) {
+      if (reject) {
+        reject();
+      } else if (this.callback) {
+        this.callback(new Error('All Attempts Failed'));
+      }
+    }
+    if (this.timesRemaining < -1 ) {
+      throw new Error(`Negative ${this.timesRemaining} Times Remaining`);
+    }
+    methodToTry()
+      .then((result)=> {
+        if (resolve) {
+          resolve(result);
+        } else if (this.callback) {
+          this.callback(null, result);
+        }
+      })
+      .catch((e) => {
+        if (this.delay > 0) {
+          let delay = this.backoff ? this.delay * (this.timesToTry - this.timesRemaining) : this.delay;
+          return setTimeout(() => {
+            return this.tryCall(methodToTry, resolve, reject);
+          }, this.delay);
+        } else {
+          return this.tryCall(methodToTry, resolve, reject);
+        }
+      });
+
+
+
+  }
   execute (attempt, callback) {
     this.callback = callback;
     this.tryCall(attempt);
@@ -50,6 +85,13 @@ export default class CircuitBreaker {
     this.promised = true;
     return new Promise((resolve, reject) => {
       this.tryCall(attempt, resolve, reject);
+    })
+
+  }
+  executeAsync(attempt) {
+    this.promised = true;
+    return new Promise((resolve, reject) => {
+      this.tryPromise(attempt, resolve, reject);
     })
 
   }
