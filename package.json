@@ -15,8 +15,8 @@
   "main": "index.js",
   "scripts": {
     "build": "babel cb.js --out-file index.js",
-    "test": "mocha --require babel-core/register",
-    "watch": "mocha -w --require babel-core/register"
+    "test": "mocha --compilers js:babel-register",
+    "watch": "mocha -w --compilers js:babel/register"
   },
   "repository": {
     "type": "git",
