@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>back-off</title>
+  <link rel="stylesheet" type="text/css" href="styles.css" />
+  <meta name="description" content="Circuit Breaker pattern in js" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+
+<body>
+  <div class="container">
+  <h1 id="back-off">Back-Off</h1>
+<h2 id="circuit-breaker-design-pattern-for-javascript">Circuit breaker design pattern for JavaScript</h2>
+<p><a href="https://travis-ci.org/Kevnz/back-off"><img src="https://travis-ci.org/Kevnz/back-off.svg?branch=master" alt="Build Status" /></a></p>
+<p>This module let's you use the circuit breaker pattern and call a function multiple times. In addition you can specify a delay to be applied between attempts as well as extending the delay as attempts are made.</p>
+<h3 id="asyncawait">Async/Await</h3>
+<pre><code class="js language-js">import BackOff from 'back-off';
+const backoff = new BackOff({
+    times: 5, //number of times method should be called
+    delay: 50, //delay in milliseconds between calls
+    backoff: true // if the delay should be doubled between execution attempts
+});
+try {
+  const result = await backoff.executeAsync(asyncTask);
+} catch (error) {
+  //do something with the final error
+}</code></pre>
+<h3 id="promise">Promise</h3>
+<pre><code class="js language-js">import BackOff from 'back-off';
+const backoff = new BackOff({
+    times: 5, //number of times method should be called
+    delay: 50, //delay in milliseconds between calls
+    backoff: true // if the delay should be doubled between execution attempts
+});
+
+backoff.executeAsPromise(() =&gt; {
+  //do something here that may fail
+})
+.then(()=&gt; {
+  // do something else
+})
+.catch(() =&gt; {
+  //attempts failed
+});</code></pre>
+<h3 id="callback">Callback</h3>
+<pre><code class="js language-js">const BackOff = require('back-off').default;
+const backoff = new BackOff({
+    times: 5, //number of times method should be called
+    delay: 50, //delay in milliseconds between calls
+    backoff: true // if the delay should be doubled between execution attempts
+});
+
+backoff.execute(() =&gt; {
+  //do something here
+}, (err) =&gt; {
+  //do something here.
+  if(err) {
+    it failed
+  }
+});
+// or fire and forget
+backoff.execute(() =&gt; {
+  //do something here
+});</code></pre>
+<p>The tests show the module in action.</p>
+  </div>
+</body>
