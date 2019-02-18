@@ -1,48 +1,45 @@
-import assert from 'assert';
-import CircuitBreaker from '../cb';
+import CircuitBreaker from '../index';
 
 describe('The Circuit Breaker Module', () => {
   describe('the callback api', () => {
     it('should accept a function', (done) => {
       const cb = new CircuitBreaker();
       cb.execute(() => {
-        assert.ok(true, 'this got executed');
+        expect(true).toBe(true);
         done();
       });
     });
     it('should accept a callback function', (done) => {
       const cb = new CircuitBreaker();
       cb.execute(() => {
-        assert.ok(true, 'this got executed');
+        expect(true).toBe(true);
       }, (err) => {
         done();
       });
     });
     it('should execute a function a default of 3 times', (done) => {
       const cb = new CircuitBreaker();
-      var executeCount = 0;
+      let executeCount = 0;
       cb.execute(() => {
         executeCount++;
         throw new Error("This is an error");
       }, (err) => {
-          assert.ok(err !== null, 'this got executed');
-          assert.ok(executeCount === 3, 'this got executed 3 times');
-          done();
+        expect(err).not.toBe(null);
+        expect(executeCount).toBeGreaterThanOrEqual(3)
+        done();
       });
     });
     it('should allow the times to execute to be configured', (done) => {
       const cb = new CircuitBreaker({times: 6});
       let executeCount = 0;
-      cb.execute((finalError) => {
+      cb.execute(() => {
         executeCount++;
-        if (executeCount === 6) {
-          assert.ok(finalError !== null, 'this got executed');
+        throw new Error("This is an error");
+      }, (finalError) => {
+        executeCount++;
+         if (executeCount === 7) {
+          expect(finalError).not.toBe(null);
           done();
-        } else if (executeCount > 6) {
-          assert.fail(executeCount, 6);
-        }
-        else {
-          throw new Error("This is an error");
         }
       });
     });
@@ -54,11 +51,13 @@ describe('The Circuit Breaker Module', () => {
         executeCount++;
         if (executeCount === 6) {
           const end = Date.now();
-          assert.ok(finalError !== null, 'this got executed');
-          assert.ok(start + 50 < end && start + 70 > end, 'Should be long enough, but not to long');
+
+          expect(finalError).not.toBe(null);
+          expect(start + 50 < end && start + 70 > end).toBe(true);
           done();
         } else if (executeCount > 6) {
-          assert.fail(executeCount, 6, "executed too many times");
+          expect(executeCount > 6).toBe(false);
+
         }
         else {
           throw new Error("This is an error");
@@ -74,12 +73,13 @@ describe('The Circuit Breaker Module', () => {
         executeCount++;
         if (executeCount === 4) {
           let end = Date.now();
-          assert.ok(finalError !== null, 'this got executed');
+          expect(finalError).not.toBe(null);
           const totaldiff = end - start;
-          assert.ok(start < end && totaldiff > 300 && totaldiff < 400 , 'Should be long enough, but not to long');
+
+          expect(start < end && totaldiff > 300 && totaldiff < 400).toBe(true)
           done();
         } else if (executeCount > 4) {
-          assert.fail(executeCount,finalError, "executed too many times");
+          expect(true).toBe(false);
         }
         else {
           throw new Error("This is an error");

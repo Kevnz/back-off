@@ -1,6 +1,6 @@
 {
   "name": "back-off",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Circuit Breaker pattern in js",
   "keywords": [
     "resilient",
@@ -15,8 +15,9 @@
   "main": "index.js",
   "scripts": {
     "build": "babel cb.js --out-file index.js",
-    "test": "mocha --compilers js:babel-register",
-    "watch": "mocha -w --compilers js:babel/register"
+    "postbuild": "npm run test",
+    "test": "jest",
+    "watch": "jest -w"
   },
   "repository": {
     "type": "git",
@@ -29,10 +30,10 @@
   },
   "homepage": "https://github.com/Kevnz/back-off",
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-preset-latest": "^6.16.0",
-    "babel-register": "^6.18.0",
-    "mocha": "^5.2.0",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.3",
+    "@babel/preset-env": "^7.3.1",
+    "jest": "^24.1.0",
     "nvm-test": "^2.0.3",
     "nvm-test-plugin-travis": "^2.0.1"
   }

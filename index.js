@@ -1,14 +1,19 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+exports.default = exports.CircuitBreaker = void 0;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var CircuitBreaker = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var CircuitBreaker =
+/*#__PURE__*/
+function () {
   function CircuitBreaker(props) {
     _classCallCheck(this, CircuitBreaker);
 
@@ -24,28 +29,33 @@ var CircuitBreaker = function () {
   }
 
   _createClass(CircuitBreaker, [{
-    key: 'tryCall',
+    key: "tryCall",
     value: function tryCall(methodToTry, resolve, reject) {
       var _this = this;
 
       this.timesRemaining--;
 
-      if (this.timesRemaining < 0) {
+      if (this.timesRemaining == -1) {
         if (reject) {
-          reject();
+          return reject();
         } else if (this.callback) {
-          this.callback(new Error('All Attempts Failed'));
+          return this.callback(new Error('All Attempts Failed'));
         }
+
+        return;
       }
+
       if (this.timesRemaining < -1) {
-        throw new Error('Negative ' + this.timesRemaining + ' Times Remaining');
+        throw new Error("Negative ".concat(this.timesRemaining, " Times Remaining"));
       }
+
       try {
         methodToTry();
+
         if (resolve) {
-          resolve();
+          return resolve();
         } else if (this.callback) {
-          this.callback();
+          return this.callback();
         }
       } catch (e) {
         if (this.delay > 0) {
@@ -59,7 +69,7 @@ var CircuitBreaker = function () {
       }
     }
   }, {
-    key: 'tryPromise',
+    key: "tryPromise",
     value: function tryPromise(methodToTry, resolve, reject) {
       var _this2 = this;
 
@@ -67,14 +77,16 @@ var CircuitBreaker = function () {
 
       if (this.timesRemaining < 0) {
         if (reject) {
-          reject();
+          return reject();
         } else if (this.callback) {
-          this.callback(new Error('All Attempts Failed'));
+          return this.callback(new Error('All Attempts Failed'));
         }
       }
+
       if (this.timesRemaining < -1) {
-        throw new Error('Negative ' + this.timesRemaining + ' Times Remaining');
+        throw new Error("Negative ".concat(this.timesRemaining, " Times Remaining"));
       }
+
       methodToTry().then(function (result) {
         if (resolve) {
           resolve(result);
@@ -93,13 +105,14 @@ var CircuitBreaker = function () {
       });
     }
   }, {
-    key: 'execute',
-    value: function execute(attempt, callback) {
+    key: "execute",
+    value: function execute(attempt) {
+      var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
       this.callback = callback;
       this.tryCall(attempt);
     }
   }, {
-    key: 'executeAsPromise',
+    key: "executeAsPromise",
     value: function executeAsPromise(attempt) {
       var _this3 = this;
 
@@ -109,7 +122,7 @@ var CircuitBreaker = function () {
       });
     }
   }, {
-    key: 'executeAsync',
+    key: "executeAsync",
     value: function executeAsync(attempt) {
       var _this4 = this;
 
@@ -123,4 +136,6 @@ var CircuitBreaker = function () {
   return CircuitBreaker;
 }();
 
-exports.default = CircuitBreaker;
+exports.CircuitBreaker = CircuitBreaker;
+var _default = CircuitBreaker;
+exports.default = _default;

@@ -1,5 +1,4 @@
-import CircuitBreaker from '../cb';
-import assert from 'assert';
+import CircuitBreaker from '../index';
 
 describe('The Circuit Breaker Module As Promised', () => {
   describe('the api', () => {
@@ -7,24 +6,24 @@ describe('The Circuit Breaker Module As Promised', () => {
 
       const cb = new CircuitBreaker();
       cb.executeAsPromise(() => {
-        assert.ok(true, 'this got executed');
+        expect(true).toBe(true);
       })
       .then(()=> {
-        assert.ok(true, 'then got executed');
+        expect(true).toBe(true);
         done();
       });
     });
     it('should accept a function and return a promise on completion when `executeAsync` is called', (done) => {
       const promisedFunc = () => {
         return new Promise((resolve, reject) => {
-          assert.ok(true, 'promise got executed');
+          expect(true).toBe(true);
           setTimeout(resolve, 20);
         })
       }
       const cb = new CircuitBreaker();
       cb.executeAsync(promisedFunc)
       .then(()=> {
-        assert.ok(true, 'then got executed');
+        expect(true).toBe(true);
         done();
       });
     });
@@ -32,14 +31,14 @@ describe('The Circuit Breaker Module As Promised', () => {
     it('should accept a function and return a promise on completion when `executeAsync` is called with a promise', (done) => {
       const promisedFunc = () => {
         return new Promise((resolve, reject) => {
-          assert.ok(true, 'promise got executed');
+          expect(true).toBe(true);
           setTimeout(resolve, 20);
         })
       }
       const cb = new CircuitBreaker();
       cb.executeAsync(promisedFunc)
       .then((result)=> {
-        assert.ok(true, 'final then got executed');
+        expect(true).toBe(true);
         done();
       });
     });
@@ -47,7 +46,7 @@ describe('The Circuit Breaker Module As Promised', () => {
     it('should accept a function and return a result from the promise on completion when `executeAsync` is called with a promise', (done) => {
       const promisedFunc = () => {
         return new Promise((resolve, reject) => {
-          assert.ok(true, 'promise got executed');
+          expect(true).toBe(true);
           setTimeout(()=> {
             return resolve(42);
           }, 20);
@@ -56,7 +55,7 @@ describe('The Circuit Breaker Module As Promised', () => {
       const cb = new CircuitBreaker();
       cb.executeAsync(promisedFunc)
       .then((result)=> {
-        assert.ok(result === 42, 'final then got executed');
+        expect(result).toBe(42);
         done();
       });
     });
@@ -64,19 +63,19 @@ describe('The Circuit Breaker Module As Promised', () => {
       let count = 0;
       const promisedFunc = () => {
         return new Promise((resolve, reject) => {
-          assert.ok(true, 'promise got executed');
+          expect(true).toBe(true);
           if (count === 0) {
             count++;
             return reject();
           }
-          assert.ok(count > 0, 'promise got executed again');
+          expect(count > 0).toBe(true);
           return setTimeout(resolve, 20);
         })
       }
       const cb = new CircuitBreaker();
       cb.executeAsync(promisedFunc)
       .then((result)=> {
-        assert.ok(true, 'final then got executed');
+        expect(true).toBe(true);
         done();
       });
     });
@@ -86,16 +85,17 @@ describe('The Circuit Breaker Module As Promised', () => {
       cb.executeAsPromise((finalError) => {
         executeCount++;
         if (executeCount === 3) {
-          assert.ok(finalError !== null, 'this got executed');
+          expect(finalError).not.toBe(null);
         } else if (executeCount > 3) {
-          assert.fail(executeCount, 3);
+
+          expect(true).toBe(false);
         }
         else {
           throw new Error("This is an error");
         }
       })
       .then(()=> {
-        assert.ok(true, 'then got executed');
+        expect(true).toBe(true);
         done();
       });
     });
@@ -105,7 +105,8 @@ describe('The Circuit Breaker Module As Promised', () => {
         throw new Error("This is an error");
       })
       .catch(()=> {
-        assert.ok(true, 'catch got executed');
+        expect(true).toBe(true);
+
         done();
       });
     });
@@ -115,9 +116,9 @@ describe('The Circuit Breaker Module As Promised', () => {
       cb.executeAsPromise((finalError) => {
         executeCount++;
         if (executeCount === 6) {
-          assert.ok(finalError !== null, 'this got executed');
+          expect(finalError).not.toBe(null);
         } else if (executeCount > 6) {
-          assert.fail(executeCount, 6);
+          expect(true).toBe(false);
         }
         else {
 
@@ -126,7 +127,7 @@ describe('The Circuit Breaker Module As Promised', () => {
 
       })
       .then(()=> {
-        assert.ok(true, 'then got executed');
+        expect(true).toBe(true);
         done();
       });
 
@@ -139,10 +140,10 @@ describe('The Circuit Breaker Module As Promised', () => {
         executeCount++;
         if (executeCount === 6) {
           const end = Date.now();
-          assert.ok(finalError !== null, 'this got executed');
-          assert.ok(start + 50 < end && start + 70 > end, 'Should be long enough, but not to long');
+          expect(finalError).not.toBe(null);
+          expect(start + 50 < end && start + 70 > end).toBe(true);
         } else if (executeCount > 6) {
-          assert.fail(executeCount, 6, "executed too many times");
+          expect(true).toBe(false);
         }
         else {
           throw new Error("This is an error");
@@ -150,7 +151,7 @@ describe('The Circuit Breaker Module As Promised', () => {
 
       })
       .then(()=> {
-        assert.ok(true, 'then got executed');
+        expect(true).toBe(true);
         done();
       });
     });
@@ -162,11 +163,11 @@ describe('The Circuit Breaker Module As Promised', () => {
         executeCount++;
         if (executeCount === 4) {
           const end = Date.now();
-          assert.ok(finalError !== null, 'this got executed');
+          expect(finalError).not.toBe(null);
           const totaldiff = end - start;
-          assert.ok(start < end && totaldiff > 300 && totaldiff < 400 , 'Should be long enough, but not to long');
+          expect(start < end && totaldiff > 300 && totaldiff < 400).toBe(true);
         } else if (executeCount > 4) {
-          assert.fail(executeCount,finalError, "executed too many times");
+          expect(true).toBe(true);
         }
         else {
           throw new Error("This is an error");
@@ -174,7 +175,8 @@ describe('The Circuit Breaker Module As Promised', () => {
 
       })
       .then(()=> {
-        assert.ok(true, 'then got executed');
+
+        expect(true).toBe(true);
         done();
       });
     });

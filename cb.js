@@ -1,5 +1,5 @@
 
-export default class CircuitBreaker {
+export class CircuitBreaker {
   constructor (props) {
     Object.assign(this, {
       times: 3,
@@ -14,12 +14,13 @@ export default class CircuitBreaker {
   tryCall (methodToTry, resolve, reject) {
     this.timesRemaining--;
 
-    if (this.timesRemaining < 0 ) {
+    if (this.timesRemaining == -1) {
       if (reject) {
-        reject();
+        return reject();
       } else if (this.callback) {
-        this.callback(new Error('All Attempts Failed'));
+        return this.callback(new Error('All Attempts Failed'));
       }
+      return
     }
     if (this.timesRemaining < -1 ) {
       throw new Error(`Negative ${this.timesRemaining} Times Remaining`);
@@ -27,9 +28,9 @@ export default class CircuitBreaker {
     try {
       methodToTry();
       if (resolve) {
-        resolve();
+        return resolve();
       } else if (this.callback) {
-        this.callback();
+        return this.callback();
       }
     } catch (e) {
       if (this.delay > 0) {
@@ -47,9 +48,9 @@ export default class CircuitBreaker {
 
     if (this.timesRemaining < 0 ) {
       if (reject) {
-        reject();
+        return reject();
       } else if (this.callback) {
-        this.callback(new Error('All Attempts Failed'));
+        return this.callback(new Error('All Attempts Failed'));
       }
     }
     if (this.timesRemaining < -1 ) {
@@ -77,7 +78,7 @@ export default class CircuitBreaker {
 
 
   }
-  execute (attempt, callback) {
+  execute (attempt, callback = ()=>{}) {
     this.callback = callback;
     this.tryCall(attempt);
   }
@@ -96,3 +97,5 @@ export default class CircuitBreaker {
 
   }
 }
+
+export default CircuitBreaker
