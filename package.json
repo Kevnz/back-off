@@ -1,7 +1,10 @@
 {
   "name": "back-off",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Circuit Breaker pattern in js",
+  "engines": {
+    "node": ">= 8"
+  },
   "keywords": [
     "resilient",
     "patterns",
