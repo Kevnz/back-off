@@ -1,6 +1,6 @@
 {
   "name": "back-off",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Circuit Breaker pattern in js",
   "engines": {
     "node": ">= 8"
@@ -31,11 +31,12 @@
   "bugs": {
     "url": "https://github.com/Kevnz/back-off/issues"
   },
-  "homepage": "https://github.com/Kevnz/back-off",
+  "homepage": "http://kevinisom.info/back-off",
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.3",
     "@babel/preset-env": "^7.3.1",
+    "@kev_nz/publisher": "^1.0.1",
     "jest": "^24.1.0",
     "nvm-test": "^2.0.3",
     "nvm-test-plugin-travis": "^2.0.1"

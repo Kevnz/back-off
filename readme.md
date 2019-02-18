@@ -1,8 +1,10 @@
 # Back-Off
-## Circuit breaker design pattern for JavaScript
+
+## Circuit Breaker design pattern for JavaScript
+
 [![Build Status](https://travis-ci.org/Kevnz/back-off.svg?branch=master)](https://travis-ci.org/Kevnz/back-off)
 
-This module let's you use the circuit breaker pattern and call a function multiple times. In addition you can specify a delay to be applied between attempts as well as extending the delay as attempts are made.
+This module let's you use the [Circuit Breaker](https://www.martinfowler.com/bliki/CircuitBreaker.html) pattern and call a function multiple times. In addition you can specify a delay to be applied between attempts as well as extending the delay as attempts are made.
 
 ### Async/Await
 
