@@ -11,9 +11,9 @@
 <body>
   <div class="container">
   <h1 id="back-off">Back-Off</h1>
-<h2 id="circuit-breaker-design-pattern-for-javascript">Circuit breaker design pattern for JavaScript</h2>
+<h2 id="circuit-breaker-design-pattern-for-javascript">Circuit Breaker design pattern for JavaScript</h2>
 <p><a href="https://travis-ci.org/Kevnz/back-off"><img src="https://travis-ci.org/Kevnz/back-off.svg?branch=master" alt="Build Status" /></a></p>
-<p>This module let's you use the circuit breaker pattern and call a function multiple times. In addition you can specify a delay to be applied between attempts as well as extending the delay as attempts are made.</p>
+<p>This module let's you use the <a href="https://www.martinfowler.com/bliki/CircuitBreaker.html">Circuit Breaker</a> pattern and call a function multiple times. In addition you can specify a delay to be applied between attempts as well as extending the delay as attempts are made.</p>
 <h3 id="asyncawait">Async/Await</h3>
 <pre><code class="js language-js">import BackOff from 'back-off';
 const backoff = new BackOff({
