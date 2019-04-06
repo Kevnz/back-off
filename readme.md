@@ -9,7 +9,7 @@ This module let's you use the [Circuit Breaker](https://www.martinfowler.com/bli
 ### Async/Await
 
 ```js
-import BackOff from 'back-off';
+const BackOff = require('back-off');
 const backoff = new BackOff({
     times: 5, //number of times method should be called
     delay: 50, //delay in milliseconds between calls
@@ -26,14 +26,14 @@ try {
 ### Promise
 
 ```js
-import BackOff from 'back-off';
+const BackOff = require('back-off');
 const backoff = new BackOff({
-    times: 5, //number of times method should be called
-    delay: 50, //delay in milliseconds between calls
-    backoff: true // if the delay should be doubled between execution attempts
+  times: 5, //number of times method should be called
+  delay: 50, //delay in milliseconds between calls
+  backoff: true // if the delay should be doubled between execution attempts
 });
 
-backoff.executeAsPromise(() => {
+backoff.execute(() => {
   //do something here that may fail
 })
 .then(()=> {
@@ -45,28 +45,5 @@ backoff.executeAsPromise(() => {
 
 ```
 
-### Callback
-
-```js
-const BackOff = require('back-off').default;
-const backoff = new BackOff({
-    times: 5, //number of times method should be called
-    delay: 50, //delay in milliseconds between calls
-    backoff: true // if the delay should be doubled between execution attempts
-});
-
-backoff.execute(() => {
-  //do something here
-}, (err) => {
-  //do something here.
-  if(err) {
-    it failed
-  }
-});
-// or fire and forget
-backoff.execute(() => {
-  //do something here
-});
-```
 
 The tests show the module in action.
