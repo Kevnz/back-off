@@ -38,6 +38,7 @@
   "devDependencies": {
     "@kev_nz/eslint-config": "^3.2.1",
     "@kev_nz/publisher": "^3.0.1",
+    "coveralls": "^3.0.3",
     "eslint": "^5.16.0",
     "jest": "^24.7.1"
   },
