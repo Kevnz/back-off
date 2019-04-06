@@ -22,7 +22,7 @@
     "watch": "jest -w",
     "cov": "jest --coverage",
     "coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
-    "predocs": " jest test/*.test.js --coverage --coverageDirectory=./dist/coverage ",
+    "predocs": " jest --coverage --coverageDirectory=./dist/coverage ",
     "docs": "publisher"
   },
   "repository": {
