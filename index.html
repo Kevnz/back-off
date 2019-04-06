@@ -2,66 +2,63 @@
 <html lang="en">
 
 <head>
-  <title>back-off</title>
+  <title>Back-Off - Circuit Breaker module for JavaScript - Kevin Isom</title>
   <link rel="stylesheet" type="text/css" href="styles.css" />
+  <link rel="stylesheet" type="text/css" href="extend.css" />
   <meta name="description" content="Circuit Breaker pattern in js" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/github.min.css" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="Back-Off - Circuit Breaker module for JavaScript - Kevin Isom" />
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content="Back-Off - Circuit Breaker module for JavaScript" />
+  <meta property="og:url" content="https://kevinisom.info/back-off" />
+  <meta property="og:image" content="https://avatars3.githubusercontent.com/u/62547?s=400&amp;v=4" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@kev_nz" />
+  <meta name="twitter:title" content="Back-Off - Circuit Breaker module for JavaScript - Kevin Isom" />
+  <meta name="twitter:description" content="Back-Off - Circuit Breaker module for JavaScript" />
+  <meta name="twitter:image" content="https://avatars3.githubusercontent.com/u/62547?s=400&amp;v=4" />
+
 </head>
 
 <body>
   <div class="container">
   <h1 id="back-off">Back-Off</h1>
 <h2 id="circuit-breaker-design-pattern-for-javascript">Circuit Breaker design pattern for JavaScript</h2>
-<p><a href="https://travis-ci.org/Kevnz/back-off"><img src="https://travis-ci.org/Kevnz/back-off.svg?branch=master" alt="Build Status" /></a></p>
+<p><a href="https://badge.fury.io/js/back-off"><img src="https://badge.fury.io/js/back-off.svg" alt="npm version" /></a><br />
+<a href="https://coveralls.io/github/Kevnz/back-off?branch=master"><img src="https://coveralls.io/repos/github/Kevnz/back-off/badge.svg?branch=master" alt="Coverage Status" /></a></p>
 <p>This module let's you use the <a href="https://www.martinfowler.com/bliki/CircuitBreaker.html">Circuit Breaker</a> pattern and call a function multiple times. In addition you can specify a delay to be applied between attempts as well as extending the delay as attempts are made.</p>
 <h3 id="asyncawait">Async/Await</h3>
-<pre><code class="js language-js">import BackOff from 'back-off';
-const backoff = new BackOff({
-    times: 5, //number of times method should be called
-    delay: 50, //delay in milliseconds between calls
-    backoff: true // if the delay should be doubled between execution attempts
+<pre><code class="hljs js language-js"><span class="hljs-keyword">const</span> BackOff = <span class="hljs-built_in">require</span>(<span class="hljs-string">'back-off'</span>);
+<span class="hljs-keyword">const</span> backoff = <span class="hljs-keyword">new</span> BackOff({
+    <span class="hljs-attr">times</span>: <span class="hljs-number">5</span>, <span class="hljs-comment">//number of times method should be called</span>
+    delay: <span class="hljs-number">50</span>, <span class="hljs-comment">//delay in milliseconds between calls</span>
+    backoff: <span class="hljs-literal">true</span> <span class="hljs-comment">// if the delay should be doubled between execution attempts</span>
 });
-try {
-  const result = await backoff.executeAsync(asyncTask);
-} catch (error) {
-  //do something with the final error
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> backoff.executeAsync(asyncTask);
+} <span class="hljs-keyword">catch</span> (error) {
+  <span class="hljs-comment">//do something with the final error</span>
 }</code></pre>
 <h3 id="promise">Promise</h3>
-<pre><code class="js language-js">import BackOff from 'back-off';
-const backoff = new BackOff({
-    times: 5, //number of times method should be called
-    delay: 50, //delay in milliseconds between calls
-    backoff: true // if the delay should be doubled between execution attempts
+<pre><code class="hljs js language-js"><span class="hljs-keyword">const</span> BackOff = <span class="hljs-built_in">require</span>(<span class="hljs-string">'back-off'</span>);
+<span class="hljs-keyword">const</span> backoff = <span class="hljs-keyword">new</span> BackOff({
+  <span class="hljs-attr">times</span>: <span class="hljs-number">5</span>, <span class="hljs-comment">//number of times method should be called</span>
+  delay: <span class="hljs-number">50</span>, <span class="hljs-comment">//delay in milliseconds between calls</span>
+  backoff: <span class="hljs-literal">true</span> <span class="hljs-comment">// if the delay should be doubled between execution attempts</span>
 });
 
-backoff.executeAsPromise(() =&gt; {
-  //do something here that may fail
+backoff.execute(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-comment">//do something here that may fail</span>
 })
-.then(()=&gt; {
-  // do something else
+.then(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span> {
+  <span class="hljs-comment">// do something else</span>
 })
-.catch(() =&gt; {
-  //attempts failed
-});</code></pre>
-<h3 id="callback">Callback</h3>
-<pre><code class="js language-js">const BackOff = require('back-off').default;
-const backoff = new BackOff({
-    times: 5, //number of times method should be called
-    delay: 50, //delay in milliseconds between calls
-    backoff: true // if the delay should be doubled between execution attempts
-});
-
-backoff.execute(() =&gt; {
-  //do something here
-}, (err) =&gt; {
-  //do something here.
-  if(err) {
-    it failed
-  }
-});
-// or fire and forget
-backoff.execute(() =&gt; {
-  //do something here
+.catch(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-comment">//attempts failed</span>
 });</code></pre>
 <p>The tests show the module in action.</p>
   </div>
