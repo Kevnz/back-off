@@ -1,6 +1,6 @@
 {
   "name": "back-off",
-  "version": "3.0.2",
+  "version": "4.0.0",
   "description": "Circuit Breaker pattern in js",
   "engines": {
     "node": ">= 8"
@@ -17,10 +17,13 @@
   ],
   "main": "index.js",
   "scripts": {
-    "build": "babel cb.js --out-file index.js",
-    "postbuild": "npm run test",
+    "lint": "eslint ./src",
     "test": "jest",
-    "watch": "jest -w"
+    "watch": "jest -w",
+    "cov": "jest --coverage",
+    "coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
+    "predocs": " jest test/*.test.js --coverage --coverageDirectory=./dist/coverage ",
+    "docs": "publisher"
   },
   "repository": {
     "type": "git",
@@ -31,14 +34,15 @@
   "bugs": {
     "url": "https://github.com/Kevnz/back-off/issues"
   },
-  "homepage": "http://kevinisom.info/back-off",
+  "homepage": "https://kevinisom.info/back-off",
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.3",
-    "@babel/preset-env": "^7.3.1",
-    "@kev_nz/publisher": "^1.0.1",
-    "jest": "^24.1.0",
-    "nvm-test": "^2.0.3",
-    "nvm-test-plugin-travis": "^2.0.1"
+    "@kev_nz/eslint-config": "^3.2.1",
+    "@kev_nz/publisher": "^3.0.1",
+    "coveralls": "^3.0.3",
+    "eslint": "^5.16.0",
+    "jest": "^24.7.1"
+  },
+  "dependencies": {
+    "@kev_nz/async-tools": "^1.0.1"
   }
 }
