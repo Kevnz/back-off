@@ -2,6 +2,8 @@
 
 ## Circuit Breaker design pattern for JavaScript
 
+![circuit breaker](https://kevinisom.info/back-off/circuit-breaker.svg)
+
 [![npm version](https://badge.fury.io/js/back-off.svg)](https://badge.fury.io/js/back-off)
 [![Coverage Status](https://coveralls.io/repos/github/Kevnz/back-off/badge.svg?branch=master)](https://coveralls.io/github/Kevnz/back-off?branch=master)
 
