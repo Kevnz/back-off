@@ -4,7 +4,7 @@
 const { delay } = require('@kev_nz/async-tools')
 const CircuitBreaker = require('../index')
 
-describe('The Circuit Breaker Module As Promised', () => {
+describe('The Circuit Breaker Module', () => {
   describe('the api', () => {
     it('should accept a function and return a promise on completion', async () => {
       const cb = new CircuitBreaker()
@@ -126,7 +126,8 @@ describe('The Circuit Breaker Module As Promised', () => {
         if (executeCount === 6) {
           const end = Date.now()
           expect(finalError).not.toBe(null)
-          expect(start + 50 < end && start + 70 > end).toBe(true)
+          expect(start + 50).toBeLessThan(end)
+          expect(start + 60).toBeGreaterThan(end)
         } else if (executeCount > 6) {
           expect(true).toBe(false)
         } else {
