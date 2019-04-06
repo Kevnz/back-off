@@ -126,8 +126,8 @@ describe('The Circuit Breaker Module', () => {
         if (executeCount === 6) {
           const end = Date.now()
           expect(finalError).not.toBe(null)
-          expect(start + 50).toBeLessThan(end)
-          expect(start + 60).toBeGreaterThan(end)
+          expect(start + 50).toBeLessThanOrEqual(end)
+          expect(start + 60).toBeGreaterThanOrEqual(end)
         } else if (executeCount > 6) {
           expect(true).toBe(false)
         } else {
