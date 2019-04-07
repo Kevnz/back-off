@@ -1,6 +1,7 @@
 # Back-Off
 
 [![npm version](https://badge.fury.io/js/back-off.svg)](https://badge.fury.io/js/back-off)
+![Build Status](https://img.shields.io/circleci/project/github/Kevnz/back-off/master.svg)
 [![Coverage Status](https://coveralls.io/repos/github/Kevnz/back-off/badge.svg?branch=master)](https://coveralls.io/github/Kevnz/back-off?branch=master)
 
 ## Circuit Breaker design pattern for JavaScript
