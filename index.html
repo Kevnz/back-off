@@ -39,7 +39,7 @@
     backoff: <span class="hljs-literal">true</span> <span class="hljs-comment">// if the delay should be doubled between execution attempts</span>
 });
 <span class="hljs-keyword">try</span> {
-  <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> backoff.executeAsync(asyncTask);
+  <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> backoff.execute(asyncTask);
 } <span class="hljs-keyword">catch</span> (error) {
   <span class="hljs-comment">//do something with the final error</span>
 }</code></pre>
