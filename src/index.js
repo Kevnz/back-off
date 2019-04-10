@@ -1,5 +1,5 @@
 const { delay } = require('@kev_nz/async-tools')
-class CircuitBreaker {
+class BackOff {
   constructor(props) {
     Object.assign(
       this,
@@ -41,4 +41,4 @@ class CircuitBreaker {
   }
 }
 
-module.exports = CircuitBreaker
+module.exports = BackOff

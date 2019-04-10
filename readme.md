@@ -18,7 +18,7 @@ const backoff = new BackOff({
     backoff: true // if the delay should be doubled between execution attempts
 });
 try {
-  const result = await backoff.executeAsync(asyncTask);
+  const result = await backoff.execute(asyncTask);
 } catch (error) {
   //do something with the final error
 }
