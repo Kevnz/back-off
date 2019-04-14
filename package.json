@@ -16,6 +16,9 @@
     "promise"
   ],
   "main": "index.js",
+  "files": [
+    "/src"
+  ],
   "scripts": {
     "lint": "eslint ./src",
     "test": "jest",

@@ -15,7 +15,7 @@ class BackOff {
     this.timesRemaining = this.times
   }
 
-  async tryPromise(methodToTry) {
+  async attemptCall(methodToTry) {
     this.timesRemaining--
 
     if (this.timesRemaining < 0) {
@@ -24,6 +24,7 @@ class BackOff {
     try {
       return await methodToTry()
     } catch (error) {
+      this.attemptCleanup()
       if (this.timesRemaining === 0) {
         throw error
       }
@@ -33,11 +34,12 @@ class BackOff {
           : this.delay
         await delay(delayTime)
       }
-      return this.tryPromise(methodToTry)
+      return this.attemptCall(methodToTry)
     }
   }
-  async execute(attempt) {
-    return this.tryPromise(attempt)
+  async execute(attempt, cleanup = () => {}) {
+    this.attemptCleanup = cleanup
+    return this.attemptCall(attempt)
   }
 }
 
