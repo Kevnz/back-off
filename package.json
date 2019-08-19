@@ -26,7 +26,10 @@
     "cov": "jest --coverage",
     "coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "predocs": " jest --coverage --coverageDirectory=./dist/coverage ",
-    "docs": "publisher"
+    "docs": "publisher",
+    "preversion": "npm test",
+    "postversion": "npm publish --access=public",
+    "postpublish": "git push origin --all --follow-tags && npm run docs"
   },
   "repository": {
     "type": "git",
