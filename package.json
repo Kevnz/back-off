@@ -42,13 +42,13 @@
   },
   "homepage": "https://kevinisom.info/back-off",
   "devDependencies": {
-    "@kev_nz/eslint-config": "^3.2.1",
-    "@kev_nz/publisher": "^3.0.1",
-    "coveralls": "^3.0.3",
-    "eslint": "^5.16.0",
-    "jest": "^24.7.1"
+    "@kev_nz/eslint-config": "^4.0.0",
+    "@kev_nz/publisher": "^4.0.1",
+    "coveralls": "^3.0.6",
+    "eslint": "^6.3.0",
+    "jest": "^24.9.0"
   },
   "dependencies": {
-    "@kev_nz/async-tools": "^1.0.1"
+    "@kev_nz/async-tools": "^1.2.3"
   }
 }
