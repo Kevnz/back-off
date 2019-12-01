@@ -29,7 +29,7 @@ class BackOff {
         throw error
       }
       if (this.delay > 0) {
-        let delayTime = this.backoff
+        const delayTime = this.backoff
           ? this.delay * (this.timesToTry - this.timesRemaining)
           : this.delay
         await delay(delayTime)
@@ -37,6 +37,7 @@ class BackOff {
       return this.attemptCall(methodToTry)
     }
   }
+
   async execute(attempt, cleanup = () => {}) {
     this.attemptCleanup = cleanup
     return this.attemptCall(attempt)
