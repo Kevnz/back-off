@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1574199325716" clover="3.2.0">
-  <project timestamp="1574199325716" name="All files">
+<coverage generated="1575238796097" clover="3.2.0">
+  <project timestamp="1575238796097" name="All files">
     <metrics statements="19" coveredstatements="19" conditionals="9" coveredconditionals="9" methods="4" coveredmethods="4" elements="32" coveredelements="32" complexity="0" loc="19" ncloc="19" packages="1" files="1" classes="1"/>
     <file name="index.js" path="/Users/t826308/Projects/kevnz/back-off/src/index.js">
       <metrics statements="19" coveredstatements="19" conditionals="9" coveredconditionals="9" methods="4" coveredmethods="4"/>
@@ -20,9 +20,9 @@
       <line num="32" count="6" type="cond" truecount="2" falsecount="0"/>
       <line num="35" count="6" type="stmt"/>
       <line num="37" count="15" type="stmt"/>
-      <line num="41" count="11" type="stmt"/>
       <line num="42" count="11" type="stmt"/>
-      <line num="46" count="1" type="stmt"/>
+      <line num="43" count="11" type="stmt"/>
+      <line num="47" count="1" type="stmt"/>
     </file>
   </project>
 </coverage>
